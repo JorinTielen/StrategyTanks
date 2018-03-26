@@ -4,7 +4,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
-public class Map : MonoBehaviour
+public class Map : MonoBehaviour, ICellRange
 {
 	public int Height;
 	public int Width;
@@ -23,6 +23,11 @@ public class Map : MonoBehaviour
 			c.Select();
 			return;
 		}
+	}
+
+	public Cell[,] GetCellArray()
+	{
+		return _cells;
 	}
 
 	public List<Cell> GetCellsInRange(Cell center, int range)
@@ -51,6 +56,11 @@ public class Map : MonoBehaviour
 		sw.Stop();
  		Debug.Log(sw.Elapsed.TotalMilliseconds);
 		return cellsInRange;
+	}
+
+	public int GetDistance(Cell cell1, Cell cell2)
+	{
+		throw new System.NotImplementedException();
 	}
 
 	public List<Cell> GetCellNeighbors(Cell cell)
@@ -126,7 +136,7 @@ public class Map : MonoBehaviour
 				}
 				
 				_cells[x, y] = Instantiate(CellPrefabs[index], new Vector3(x, 0, y), Quaternion.identity, gameObject.transform);
-				_cells[x, y].Construct(new Point(x, y), cellType);
+				_cells[x, y].Construct(this, new Point(x, y), cellType);
 			}
 		}
 	}

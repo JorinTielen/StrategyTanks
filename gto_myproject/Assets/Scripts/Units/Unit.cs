@@ -1,35 +1,71 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
     public Cell Position;
     public Player Player;
-    public int Range;
+    public int MaxRange;
+
+    private int _currentRange;
     
     public delegate void SelectUnit();
     public event SelectUnit OnSelected;
-    
+
+    private List<Cell> _selectedCells;
     private bool _isMoving;
     private bool _selected;
 
-    public void Select()
+    public void StartTurn()
     {
-        _selected = true;
-        if (OnSelected != null) OnSelected();
+        _currentRange = MaxRange;
+    }
+
+    public void Select(ICellRange range)
+    {
+        if (!_selected)
+        {
+            _selected = true;
+            _selectedCells = range.GetCellsInRange(Position, _currentRange);
+            foreach (var cell in _selectedCells)
+            {
+                cell.Highlight();
+            }
+        
+            if (OnSelected != null) OnSelected();
+        }
     }
 
     public void Unselect()
     {
-        _selected = false;
+        if (_selected)
+        {
+            foreach (var cell in _selectedCells)
+            {
+                cell.Unhighlight();
+            }
+
+            _selectedCells = null;
+            _selected = false;
+        }
     }
 
-    public void Move(Cell targetCell)
+    public void Move(ICellRange range, Cell targetCell)
     {
-        if (targetCell.CanMove() && _isMoving == false)
+        var cellsInRange = range.GetCellsInRange(Position, _currentRange);
+        foreach (var cell in cellsInRange)
         {
-            StartCoroutine(Move(targetCell, 0.6f));			
+            if (cell.Position.Equals(targetCell.Position))
+            {
+                if (targetCell.CanMove() && _isMoving == false)
+                {
+                    StartCoroutine(Move(targetCell, 0.6f));
+                    return;
+                }
+            }
         }
+        
     }
     
     private IEnumerator Move(Cell targetCell, float time)

@@ -138,3 +138,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Position: {fileID: 0}
   Player: {fileID: 0}
+  MaxRange: 2

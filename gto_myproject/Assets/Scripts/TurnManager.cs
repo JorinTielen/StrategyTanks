@@ -39,7 +39,7 @@ public class TurnManager : MonoBehaviour
 	{
 		if (u.Player == CurrentPlayer)
 		{
-			u.Move(targetCell);
+			CurrentPlayer.MoveUnit(u, targetCell);
 		}
 	}
 }

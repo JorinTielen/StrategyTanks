@@ -14,10 +14,19 @@ public class Player : MonoBehaviour
 		_units.Add(SniperFactory.BuildUnit(Map.GetRandomFreeCell(), this));
 		gameObject.SetActive(false);
 	}
+
+	public void MoveUnit(Unit unit, Cell targetCell)
+	{
+		unit.Move(Map, targetCell);
+	}
 	
 	public void StartTurn()
 	{
 		gameObject.SetActive(true);
+		foreach (var unit in _units)
+		{
+			unit.StartTurn();
+		}
 	}
 
 	public void EndTurn()

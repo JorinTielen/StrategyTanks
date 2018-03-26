@@ -1,7 +1,6 @@
 ﻿public class Point
 {
-    public int x;
-    public int y;
+    public int x, y;
 
     public Point(int x, int y)
     {
@@ -9,7 +8,7 @@
         this.y = y;
     }
 
-    public static Point zero()
+    public static Point Zero()
     {
         return new Point(0, 0);
     }

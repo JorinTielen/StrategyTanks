@@ -21,6 +21,7 @@ public class CellSelector : MonoBehaviour
 
 	public void Select()
 	{
+		if (_selected) return;
 		_selected = true;
 		_renderer.material.color = Selected;
 	}
