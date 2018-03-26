@@ -62,11 +62,9 @@ public class Unit : MonoBehaviour
             {
                 if (targetCell.CanMove() && _isMoving == false)
                 {
-                    Stopwatch sw = Stopwatch.StartNew();
                     var path = GetComponent<Pathfinder>().FindPath(Position, targetCell);
-                    sw.Stop();
-                    Debug.Log(sw.Elapsed.TotalMilliseconds);
                     _currentRange -= path.Count;
+                    
                     StartCoroutine(Move(targetCell, 0.6f));
                     return;
                 }
