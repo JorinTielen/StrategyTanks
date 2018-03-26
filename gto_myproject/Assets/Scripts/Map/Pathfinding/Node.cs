@@ -6,10 +6,12 @@ public class Node
     public bool Walkable;
     public Cell WorldCell;
 
-    public int GCost;
-    public int HCost;
+    public Node Parent;
+
+    public int GCost;    //The cost from the start to this node
+    public int HCost;    //The cost from this node to the end
     
-    public int FCost
+    public int FCost    //Combined cost value
     {
         get { return GCost + HCost; }
     }

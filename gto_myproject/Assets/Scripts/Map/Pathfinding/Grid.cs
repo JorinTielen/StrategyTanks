@@ -9,6 +9,7 @@ public class Grid
     {
         _width = width;
         _height = height;
+        _grid = new Node[width, height];
         
         for (int x = 0; x < _width; x++)
         {
