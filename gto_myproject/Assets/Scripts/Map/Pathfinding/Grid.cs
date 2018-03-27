@@ -16,7 +16,7 @@ public class Grid
             for (int y = 0; y < _height; y++)
             {
                 Cell c = cellMap[x, y];
-                Node n = new Node(new Point(x, y), c.CanMove(), c);
+                Node n = new Node(new Point(x, y), c);
 
                 _grid[x, y] = n;
             }

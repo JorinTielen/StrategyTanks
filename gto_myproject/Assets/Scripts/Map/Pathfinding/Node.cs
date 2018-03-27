@@ -3,7 +3,10 @@
 public class Node
 {
     public Point Position;
-    public bool Walkable;
+    public bool Walkable
+    {
+        get { return WorldCell.CanMove(); }
+    }
     public Cell WorldCell;
 
     public Node Parent;
@@ -16,10 +19,9 @@ public class Node
         get { return GCost + HCost; }
     }
 
-    public Node(Point position, bool walkable, Cell worldCell)
+    public Node(Point position, Cell worldCell)
     {
         Position = position;
-        Walkable = walkable;
         WorldCell = worldCell;
     }
 }

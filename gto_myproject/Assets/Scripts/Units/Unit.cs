@@ -6,20 +6,24 @@ using Debug = UnityEngine.Debug;
 
 public class Unit : MonoBehaviour
 {
+    [HideInInspector]
     public Cell Position;
+    [HideInInspector]
     public Player Player;
     
+    [Header("Max Stats")]
     public int MaxRange;
     public int MaxHealth;
     public int Damage;
 
+    [Header("Rotation Anchors")]
+    public Transform TankRotationAnchor;
+    public Transform GunRotationAnchor;
+
+    //Current variables
     private int _currentRange;
     private int _currentHealth;
     private bool _canAttack;
-    
-    public delegate void SelectUnit();
-    public event SelectUnit OnSelected;
-
     private List<Cell> _selectedCells;
     private bool _isMoving;
     private bool _selected;
@@ -40,8 +44,6 @@ public class Unit : MonoBehaviour
             {
                 cell.Highlight();
             }
-        
-            if (OnSelected != null) OnSelected();
         }
     }
 
@@ -90,8 +92,9 @@ public class Unit : MonoBehaviour
                 if (targetCell.CanMove() && _isMoving == false)
                 {
                     var path = GetComponent<Pathfinder>().FindPath(Position, targetCell);
+                    if (path == null) return;
+
                     _currentRange -= path.Count;
-                    
                     StartCoroutine(Move(targetCell, 0.6f));
                     return;
                 }
@@ -102,6 +105,16 @@ public class Unit : MonoBehaviour
     private IEnumerator Move(Cell targetCell, float time)
     {
         _isMoving = true;
+
+        //First rotate towards target
+        Quaternion neededRotation = Quaternion.LookRotation(targetCell.transform.position - transform.position);
+        while (TankRotationAnchor.rotation != neededRotation)
+        {
+            TankRotationAnchor.rotation = Quaternion.RotateTowards(TankRotationAnchor.rotation, neededRotation, 250f * Time.deltaTime);
+            yield return null;
+        }
+        
+        //Then start moving
         var elapsedTime = 0.0f;
         var startPos = transform.position;
         var endPos = targetCell.transform.position;
@@ -120,6 +133,7 @@ public class Unit : MonoBehaviour
     private void SetPosition(Cell cell)
     {
         Position.Leave();
+        transform.parent = cell.gameObject.transform;
         Position = cell;
         Position.Enter(this);
     }
