@@ -8,9 +8,14 @@ public class Unit : MonoBehaviour
 {
     public Cell Position;
     public Player Player;
+    
     public int MaxRange;
+    public int MaxHealth;
+    public int Damage;
 
     private int _currentRange;
+    private int _currentHealth;
+    private bool _canAttack;
     
     public delegate void SelectUnit();
     public event SelectUnit OnSelected;
@@ -22,6 +27,7 @@ public class Unit : MonoBehaviour
     public void StartTurn()
     {
         _currentRange = MaxRange;
+        _canAttack = true;
     }
 
     public void Select(ICellRange range)
@@ -50,6 +56,27 @@ public class Unit : MonoBehaviour
 
             _selectedCells = null;
             _selected = false;
+        }
+    }
+
+    public void Attack(Unit u)
+    {
+        u.DoDamage(Damage);
+        _canAttack = false;
+    }
+
+    public void DoDamage(int amount)
+    {
+        Debug.Log("ooff");
+        if (amount >= _currentHealth)
+        {
+            _currentHealth = 0;
+            Debug.Log("ded");
+            //TODO: Die
+        }
+        else
+        {
+            _currentHealth -= amount;
         }
     }
 

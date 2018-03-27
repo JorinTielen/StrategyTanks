@@ -36,7 +36,6 @@ public class Map : MonoBehaviour, ICellRange
 		
 		cellsInRange.Add(center);
 
-		Stopwatch sw = Stopwatch.StartNew();
 		for (int steps = 0; steps < range; steps++)
 		{
 			var temp = new List<Cell>();
@@ -53,8 +52,6 @@ public class Map : MonoBehaviour, ICellRange
 			cellsInRange.AddRange(temp);
 		}
 
-		sw.Stop();
- 		Debug.Log(sw.Elapsed.TotalMilliseconds);
 		return cellsInRange;
 	}
 
@@ -145,7 +142,7 @@ public class Map : MonoBehaviour, ICellRange
 	{
 		if (height >= 0.0 && height < 0.2) return CellType.WATER;
 		if (height >= 0.2 && height < 0.7) return CellType.GROUND;
-		if (height >= 0.7 && height < 1.0) return CellType.MOUNTAIN;
+		if (height >= 0.7 && height < 9.0) return CellType.MOUNTAIN;
 
 		return CellType.NONE;
 	}

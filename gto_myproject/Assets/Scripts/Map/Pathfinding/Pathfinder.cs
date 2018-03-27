@@ -6,7 +6,7 @@ public class Pathfinder : MonoBehaviour
     private Map _map;
     private Grid _grid;
 
-    private void Awake()
+    private void Start()
     {
         _map = GameObject.Find("Map").GetComponent<Map>();
         _grid = new Grid(_map.GetCellArray(), _map.Width, _map.Height);
