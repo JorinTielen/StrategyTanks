@@ -2,7 +2,7 @@
 
 public class CellSelector : MonoBehaviour
 {
-	public Color Empty, Hover, Selected;
+	public Color Empty, Hover, Selected, Attack;
 	
 	private MeshRenderer _renderer;
 	private bool _selected;

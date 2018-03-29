@@ -30,7 +30,7 @@ public class Map : MonoBehaviour, ICellRange
 		return _cells;
 	}
 
-	public List<Cell> GetCellsInRange(Cell center, int range)
+	public List<Cell> GetCellsInRange(Cell center, int range, bool includeEnemies)
 	{
 		var cellsInRange = new List<Cell>();
 		
@@ -45,7 +45,14 @@ public class Map : MonoBehaviour, ICellRange
 				
 				foreach (var neighbor in neighbors)
 				{
-					if (!cellsInRange.Contains(neighbor) && neighbor.CanMove()) temp.Add(neighbor);
+					if (includeEnemies)
+					{
+						if (!cellsInRange.Contains(neighbor) && neighbor.CellType == CellType.GROUND) temp.Add(neighbor);
+					}
+					else
+					{
+						if (!cellsInRange.Contains(neighbor) && neighbor.CanMove()) temp.Add(neighbor);
+					}
 				}
 			}
 			

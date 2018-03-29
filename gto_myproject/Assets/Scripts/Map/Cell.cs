@@ -52,6 +52,11 @@ public class Cell : MonoBehaviour
         if (CurrentUnit != null) CurrentUnit.Unselect();
     }
 
+    public Map GetMap()
+    {
+        return _map;
+    }
+
     public void Place(Unit unit)
     {
         CurrentUnit = unit;

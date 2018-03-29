@@ -870,6 +870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Position: {fileID: 0}
   Player: {fileID: 0}
+  UnitName: Soldier Tank
   MaxRange: 2
   MaxHealth: 3
   Damage: 1

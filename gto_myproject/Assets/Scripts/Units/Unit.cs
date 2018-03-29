@@ -10,8 +10,9 @@ public class Unit : MonoBehaviour
     public Cell Position;
     [HideInInspector]
     public Player Player;
-    
+
     [Header("Max Stats")]
+    public string UnitName;
     public int MaxRange;
     public int MaxHealth;
     public int Damage;
@@ -47,7 +48,7 @@ public class Unit : MonoBehaviour
         if (!_selected)
         {
             _selected = true;
-            _selectedCells = range.GetCellsInRange(Position, _currentRange);
+            _selectedCells = range.GetCellsInRange(Position, _currentRange, false);
             foreach (var cell in _selectedCells)
             {
                 cell.Highlight();
@@ -69,13 +70,47 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void Attack(Unit u)
+    public void AttackMode(ICellRange range)
     {
         if (_canAttack)
         {
-            u.DoDamage(Damage);
-            _canAttack = false;
-            _currentRange = 0;
+            if (_selectedCells != null)
+            {
+                foreach (var cell in _selectedCells)
+                {
+                    cell.Unhighlight();
+                }
+            }
+        
+            _selectedCells = range.GetCellsInRange(Position, MaxRange, true);
+            foreach (var cell in _selectedCells)
+            {
+                cell.Highlight();
+            }
+        }
+    }
+    
+    public void UnattackMode()
+    {
+        if (_selectedCells != null)
+        {
+            foreach (var cell in _selectedCells)
+            {
+                cell.Unhighlight();
+            }
+        }
+    }
+    
+    public void Attack(Unit u, ICellRange range)
+    {
+        if (_canAttack && u.Player != Player)
+        {
+            if (range.GetCellsInRange(Position, MaxRange, true).Contains(u.Position))
+            {
+                u.DoDamage(Damage);
+                _canAttack = false;
+                _currentRange = 0;
+            }
         }
     }
 
@@ -102,7 +137,7 @@ public class Unit : MonoBehaviour
 
     public void Move(ICellRange range, Cell targetCell)
     {
-        var cellsInRange = range.GetCellsInRange(Position, _currentRange);
+        var cellsInRange = range.GetCellsInRange(Position, _currentRange, false);
         foreach (var cell in cellsInRange)
         {
             if (cell.Position.Equals(targetCell.Position))
