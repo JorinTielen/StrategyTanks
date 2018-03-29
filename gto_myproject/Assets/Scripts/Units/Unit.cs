@@ -31,6 +31,11 @@ public class Unit : MonoBehaviour
     private bool _isMoving;
     private bool _selected;
 
+    private void Start()
+    {
+        _currentHealth = MaxHealth;
+    }
+
     public void StartTurn()
     {
         _currentRange = MaxRange;
@@ -66,8 +71,12 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit u)
     {
-        u.DoDamage(Damage);
-        _canAttack = false;
+        if (_canAttack)
+        {
+            u.DoDamage(Damage);
+            _canAttack = false;
+            _currentRange = 0;
+        }
     }
 
     public void DoDamage(int amount)
@@ -81,8 +90,8 @@ public class Unit : MonoBehaviour
         else
         {
             Debug.Log("ooff");
-            if (OnHealthChanged != null) OnHealthChanged();
             _currentHealth -= amount;
+            if (OnHealthChanged != null) OnHealthChanged();
         }
     }
 
@@ -115,6 +124,7 @@ public class Unit : MonoBehaviour
     {
         _isMoving = true;
 
+        //Loop through all the tiles in the path
         for (int i = 0; i < path.Count; i++)
         {
             var elapsedTime = 0.0f;

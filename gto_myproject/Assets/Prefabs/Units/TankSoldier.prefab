@@ -775,7 +775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 4925714991996422}
   Offset: {x: 0.4, y: 1.2, z: 0.1}
-  HpImage: {fileID: 0}
+  HpImage: {fileID: 114488700660533818}
 --- !u!114 &114162747695973004
 MonoBehaviour:
   m_ObjectHideFlags: 1

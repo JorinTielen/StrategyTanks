@@ -24,38 +24,55 @@ public class Selection : MonoBehaviour
 
 	private void LeftMouseClick()
 	{
-		if (_previousSelection != null)
-		{
-			_previousSelection.Unselect();
-		}
-			
 		RaycastHit hit;
 		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit))
+		
+		if (_previousSelection == null)
 		{
-			if (hit.transform != null)
+			if (Physics.Raycast(ray, out hit))
 			{
-				Select(hit.transform.gameObject.GetComponentInParent<Cell>());
+				if (hit.transform != null)
+				{
+					Select(hit.transform.gameObject.GetComponentInParent<Cell>());
+				}
 			}
+		}
+		else
+		{
+			if (_previousSelection.CurrentUnit != null)
+			{
+				if (Physics.Raycast(ray, out hit))
+				{
+					if (hit.transform != null)
+					{
+						var targetCell = hit.transform.gameObject.GetComponentInParent<Cell>();
+						TurnManager.PlayerMoveUnit(_previousSelection.CurrentUnit, targetCell);
+						Unselect();
+						Select(targetCell);
+					}
+				}
+			}
+			
+			Unselect();
 		}
 	}
 
 	private void RightMouseClick()
 	{
-		if (_previousSelection == null) return;
-
-		if (_previousSelection.CurrentUnit == null) return;
+		if (_previousSelection == null || _previousSelection.CurrentUnit == null) return;
 		
-		_previousSelection.Unselect();
 		RaycastHit hit;
 		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		
 		if (Physics.Raycast(ray, out hit))
 		{
 			if (hit.transform != null)
 			{
-				var targetCell = hit.transform.gameObject.GetComponentInParent<Cell>();
-				TurnManager.PlayerMoveUnit(_previousSelection.CurrentUnit, targetCell);
-				Select(targetCell);
+				Cell c = hit.transform.gameObject.GetComponentInParent<Cell>();
+				if (c.CurrentUnit == null) return;
+				
+				_previousSelection.CurrentUnit.Attack(c.CurrentUnit);
+				Unselect();
 			}
 		}
 	}
@@ -66,5 +83,13 @@ public class Selection : MonoBehaviour
 		_previousSelection = cell;
 
 		if (OnSelected != null) OnSelected();
+	}
+
+	private void Unselect()
+	{
+		if (_previousSelection == null) return;
+		
+		_previousSelection.Unselect();
+		_previousSelection = null;
 	}
 }

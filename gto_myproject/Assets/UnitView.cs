@@ -25,6 +25,6 @@ public class UnitView : MonoBehaviour
 
     private void OnHealthChanged()
     {
-        HpImage.fillAmount = (float) _unit.GetHealth() / _unit.MaxHealth;
+        HpImage.fillAmount = (float)_unit.GetHealth() / _unit.MaxHealth;
     }
 }
