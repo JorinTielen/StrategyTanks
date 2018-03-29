@@ -19,6 +19,9 @@ public class Unit : MonoBehaviour
     [Header("Rotation Anchors")]
     public Transform TankRotationAnchor;
     public Transform GunRotationAnchor;
+    
+    public delegate void HealthEvent();
+    public event HealthEvent OnHealthChanged;
 
     //Current variables
     private int _currentRange;
@@ -69,17 +72,23 @@ public class Unit : MonoBehaviour
 
     public void DoDamage(int amount)
     {
-        Debug.Log("ooff");
         if (amount >= _currentHealth)
         {
             _currentHealth = 0;
             Debug.Log("ded");
-            //TODO: Die
+            Destroy(gameObject);
         }
         else
         {
+            Debug.Log("ooff");
+            if (OnHealthChanged != null) OnHealthChanged();
             _currentHealth -= amount;
         }
+    }
+
+    public int GetHealth()
+    {
+        return _currentHealth;
     }
 
     public void Move(ICellRange range, Cell targetCell)
@@ -95,38 +104,46 @@ public class Unit : MonoBehaviour
                     if (path == null) return;
 
                     _currentRange -= path.Count;
-                    StartCoroutine(Move(targetCell, 0.6f));
+                    StartCoroutine(Move(path, 0.6f));
                     return;
                 }
             }
         } 
     }
     
-    private IEnumerator Move(Cell targetCell, float time)
+    private IEnumerator Move(List<Node> path, float time)
     {
         _isMoving = true;
 
-        //First rotate towards target
-        Quaternion neededRotation = Quaternion.LookRotation(targetCell.transform.position - transform.position);
-        while (TankRotationAnchor.rotation != neededRotation)
+        for (int i = 0; i < path.Count; i++)
         {
-            TankRotationAnchor.rotation = Quaternion.RotateTowards(TankRotationAnchor.rotation, neededRotation, 250f * Time.deltaTime);
-            yield return null;
-        }
+            var elapsedTime = 0.0f;
+            var targetCell = path[i].WorldCell;
+            
+            //First rotate towards target
+            Quaternion neededRotation = Quaternion.LookRotation(targetCell.transform.position - transform.position);
+            while (TankRotationAnchor.rotation != neededRotation && elapsedTime / 3 < time)
+            {
+                TankRotationAnchor.rotation = Quaternion.RotateTowards(TankRotationAnchor.rotation, neededRotation, 250f * Time.deltaTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         
-        //Then start moving
-        var elapsedTime = 0.0f;
-        var startPos = transform.position;
-        var endPos = targetCell.transform.position;
+            //Then start moving
+            elapsedTime = 0.0f;
+            var startPos = transform.position;
+            var endPos = targetCell.transform.position;
 
-        while (elapsedTime < time)
-        {
-            transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / time);
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            while (elapsedTime < time)
+            {
+                transform.position = Vector3.Lerp(startPos, endPos, elapsedTime / time);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            
+            SetPosition(targetCell);
         }
-		
-        SetPosition(targetCell);
+
         _isMoving = false;
     }
     

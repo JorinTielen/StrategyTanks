@@ -45,7 +45,7 @@ public class Map : MonoBehaviour, ICellRange
 				
 				foreach (var neighbor in neighbors)
 				{
-					if (!cellsInRange.Contains(neighbor)) temp.Add(neighbor);
+					if (!cellsInRange.Contains(neighbor) && neighbor.CanMove()) temp.Add(neighbor);
 				}
 			}
 			

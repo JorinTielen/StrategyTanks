@@ -1159,7 +1159,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.9264706, b: 0.9264706, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1494,7 +1494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563a6c45859d2464c868921ffa21fe63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitPrefab: {fileID: 114745344838381372, guid: c543b49eb17d1834ab165ac3c2b3a193,
+  UnitPrefab: {fileID: 114965463169581978, guid: 3b18187fbecd2d147a8667fb76740cd4,
     type: 2}
 --- !u!1 &1445848435
 GameObject:
