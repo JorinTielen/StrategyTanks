@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class Selection : MonoBehaviour
 {
-	public delegate void SelectEvent();
+	public delegate void SelectEvent(Cell cell);
 	public event SelectEvent OnSelected;
 
 	public TurnManager TurnManager;
+
+	public SelectionMode SelectionMode = SelectionMode.SELECT;
 	
 	private Cell _previousSelection;
 	
@@ -28,14 +30,17 @@ public class Selection : MonoBehaviour
 		{
 			_previousSelection.Unselect();
 		}
-			
-		RaycastHit hit;
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit))
+
+		if (SelectionMode == SelectionMode.SELECT)
 		{
-			if (hit.transform != null)
+			RaycastHit hit;
+			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out hit))
 			{
-				Select(hit.transform.gameObject.GetComponentInParent<Cell>());
+				if (hit.transform != null)
+				{
+					Select(hit.transform.gameObject.GetComponentInParent<Cell>());
+				}
 			}
 		}
 	}
@@ -45,17 +50,41 @@ public class Selection : MonoBehaviour
 		if (_previousSelection == null) return;
 
 		if (_previousSelection.CurrentUnit == null) return;
-		
-		_previousSelection.Unselect();
-		RaycastHit hit;
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit))
+
+		if (SelectionMode == SelectionMode.SELECT)
 		{
-			if (hit.transform != null)
+			_previousSelection.Unselect();
+			RaycastHit hit;
+			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out hit))
 			{
-				var targetCell = hit.transform.gameObject.GetComponentInParent<Cell>();
-				TurnManager.PlayerMoveUnit(_previousSelection.CurrentUnit, targetCell);
-				Select(targetCell);
+				if (hit.transform != null)
+				{
+					var targetCell = hit.transform.gameObject.GetComponentInParent<Cell>();
+					TurnManager.PlayerMoveUnit(_previousSelection.CurrentUnit, targetCell);
+					Select(targetCell);
+				}
+			}
+		} 
+		else if (SelectionMode == SelectionMode.ATTACK)
+		{
+			RaycastHit hit;
+			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out hit))
+			{
+				if (hit.transform != null)
+				{
+					Cell c = hit.transform.gameObject.GetComponentInParent<Cell>();
+
+					if (c.CurrentUnit != null && c.CurrentUnit.Player != TurnManager.CurrentPlayer)
+					{
+						if (_previousSelection == null || _previousSelection.CurrentUnit == null) return;
+						
+						_previousSelection.CurrentUnit.Attack(c.CurrentUnit);
+					}
+				}
+				
+				SelectionMode = SelectionMode.SELECT;
 			}
 		}
 	}
@@ -65,6 +94,6 @@ public class Selection : MonoBehaviour
 		cell.Select();
 		_previousSelection = cell;
 
-		if (OnSelected != null) OnSelected();
+		if (OnSelected != null) OnSelected(cell);
 	}
 }

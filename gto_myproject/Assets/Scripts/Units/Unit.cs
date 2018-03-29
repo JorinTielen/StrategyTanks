@@ -19,6 +19,9 @@ public class Unit : MonoBehaviour
     [Header("Rotation Anchors")]
     public Transform TankRotationAnchor;
     public Transform GunRotationAnchor;
+    
+    public delegate void HealthChanged();
+    public event HealthChanged OnHealthChanged;
 
     //Current variables
     private int _currentRange;
@@ -27,6 +30,11 @@ public class Unit : MonoBehaviour
     private List<Cell> _selectedCells;
     private bool _isMoving;
     private bool _selected;
+
+    private void Start()
+    {
+        _currentHealth = MaxHealth;
+    }
 
     public void StartTurn()
     {
@@ -63,23 +71,34 @@ public class Unit : MonoBehaviour
 
     public void Attack(Unit u)
     {
-        u.DoDamage(Damage);
-        _canAttack = false;
+        if (_canAttack)
+        {
+            u.DoDamage(Damage);
+            _canAttack = false;
+            _currentRange = 0;
+        }
     }
 
     public void DoDamage(int amount)
     {
-        Debug.Log("ooff");
+        
         if (amount >= _currentHealth)
         {
             _currentHealth = 0;
             Debug.Log("ded");
-            //TODO: Die
+            Destroy(gameObject);
         }
         else
         {
+            Debug.Log("ooff");
             _currentHealth -= amount;
+            if (OnHealthChanged != null) OnHealthChanged();
         }
+    }
+
+    public int GetHealth()
+    {
+        return _currentHealth;
     }
 
     public void Move(ICellRange range, Cell targetCell)
@@ -105,17 +124,19 @@ public class Unit : MonoBehaviour
     private IEnumerator Move(Cell targetCell, float time)
     {
         _isMoving = true;
+        var elapsedTime = 0.0f;
 
         //First rotate towards target
         Quaternion neededRotation = Quaternion.LookRotation(targetCell.transform.position - transform.position);
-        while (TankRotationAnchor.rotation != neededRotation)
+        while (TankRotationAnchor.rotation != neededRotation || elapsedTime > time * 2)
         {
             TankRotationAnchor.rotation = Quaternion.RotateTowards(TankRotationAnchor.rotation, neededRotation, 250f * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
         
         //Then start moving
-        var elapsedTime = 0.0f;
+        elapsedTime = 0.0f;
         var startPos = transform.position;
         var endPos = targetCell.transform.position;
 
