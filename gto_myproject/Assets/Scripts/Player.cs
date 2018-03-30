@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
 	public UnitFactory SniperFactory;
 	public Map Map;
 	
+	public delegate void GameOverEvent();
+	public event GameOverEvent OnGameOver;
+	
 	private List<Unit> _units = new List<Unit>();
 
 	public void StartGame()
@@ -32,5 +35,18 @@ public class Player : MonoBehaviour
 	public void EndTurn()
 	{
 		gameObject.SetActive(false);
+	}
+
+	public void RemoveUnit(Unit u)
+	{
+		_units.Remove(u);
+	}
+
+	public void CheckGameOver()
+	{
+		if (_units.Count == 0)
+		{
+			if (OnGameOver != null) OnGameOver();
+		}
 	}
 }

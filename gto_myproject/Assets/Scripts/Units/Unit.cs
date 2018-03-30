@@ -11,15 +11,20 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public Player Player;
 
+    [Header("Dependencies")]
+    public Bullet BulletPrefab;
+    public GameObject ExplosionEffect;
+
     [Header("Max Stats")]
     public string UnitName;
     public int MaxRange;
     public int MaxHealth;
     public int Damage;
 
-    [Header("Rotation Anchors")]
+    [Header("Anchors")]
     public Transform TankRotationAnchor;
     public Transform GunRotationAnchor;
+    public Transform FirePoint;
     
     public delegate void HealthEvent();
     public event HealthEvent OnHealthChanged;
@@ -107,11 +112,32 @@ public class Unit : MonoBehaviour
         {
             if (range.GetCellsInRange(Position, MaxRange, true).Contains(u.Position))
             {
-                u.DoDamage(Damage);
+                StartCoroutine(Attack(u, 0.6f));
                 _canAttack = false;
                 _currentRange = 0;
             }
         }
+    }
+
+    private IEnumerator Attack(Unit u, float speed)
+    {
+        var elapsedTime = 0.0f;
+        
+        Quaternion neededRotation = Quaternion.LookRotation(u.transform.position - transform.position);
+        while (GunRotationAnchor.rotation != neededRotation && elapsedTime / 3 < speed)
+        {
+            GunRotationAnchor.rotation = Quaternion.RotateTowards(GunRotationAnchor.rotation, neededRotation, 250f * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Shoot(u.transform, Damage);
+    }
+
+    private void Shoot(Transform target, int damage)
+    {
+        Bullet b = Instantiate(BulletPrefab, FirePoint.position, FirePoint.rotation);
+        b.Seek(target, damage);
     }
 
     public void DoDamage(int amount)
@@ -120,7 +146,13 @@ public class Unit : MonoBehaviour
         {
             _currentHealth = 0;
             Debug.Log("ded");
+            GameObject effect = Instantiate(ExplosionEffect, transform.position, transform.rotation);
+            
+            Player.RemoveUnit(this);
+            Destroy(effect, 5f);
             Destroy(gameObject);
+
+            Player.CheckGameOver();
         }
         else
         {

@@ -10,6 +10,8 @@ public class Selection : MonoBehaviour
 	public event UnselectEvent OnUnselected;
 
 	public TurnManager TurnManager;
+
+	private bool _disabled = false;
 	
 	//Moveselection
 	private Cell _previousSelection;
@@ -17,9 +19,16 @@ public class Selection : MonoBehaviour
 	//AttackSelection
 	private bool _attackMode;
 	private Unit _attackUnit;
-	
-	private void Update() 
+
+	public void Disable()
 	{
+		_disabled = true;
+	}
+	
+	private void Update()
+	{
+		if (_disabled) return;
+		
 		if (Input.GetMouseButtonDown(0))
 		{
 			LeftMouseClick();

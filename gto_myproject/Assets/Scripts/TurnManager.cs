@@ -6,6 +6,8 @@ public class TurnManager : MonoBehaviour
     public List<Player> Players;
 	public Player CurrentPlayer;
 
+	public GameObject GameOverScreen;
+
 	private int _currentIndex;
 	
 	private void Start()
@@ -17,6 +19,7 @@ public class TurnManager : MonoBehaviour
 		foreach (var p in Players)
 		{
 			p.StartGame();
+			p.OnGameOver += GameOver;
 		}
 		
 		CurrentPlayer.StartTurn();
@@ -33,6 +36,13 @@ public class TurnManager : MonoBehaviour
 		
 		CurrentPlayer = Players[_currentIndex];
 		CurrentPlayer.StartTurn();
+	}
+
+	private void GameOver()
+	{
+		Debug.Log("Game Over");
+		GameOverScreen.SetActive(true);
+		FindObjectOfType<Selection>().Disable();
 	}
 
 	public void PlayerMoveUnit(Unit u, Cell targetCell)
