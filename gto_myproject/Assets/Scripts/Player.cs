@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
 	public Color Color;
 	public UnitFactory SniperFactory;
+	public UnitFactory SoldierFactory;
 	public Map Map;
 	
 	public delegate void GameOverEvent();
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour
 	public void StartGame()
 	{
 		_units.Add(SniperFactory.BuildUnit(Map.GetRandomFreeCell(), this));
+		_units.Add(SoldierFactory.BuildUnit(Map.GetRandomFreeCell(), this));
 		gameObject.SetActive(false);
 	}
 

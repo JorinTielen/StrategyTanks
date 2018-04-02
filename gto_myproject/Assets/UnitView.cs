@@ -10,12 +10,15 @@ public class UnitView : MonoBehaviour
     private Unit _unit;
     
     public Image HpImage;
+    public Image TeamColorImage;
 
     private void Start()
     {
         _cam = Camera.main;
         _unit = Target.gameObject.GetComponent<Unit>();
         _unit.OnHealthChanged += OnHealthChanged;
+
+        TeamColorImage.color = _unit.Player.Color;
     }
 
     private void Update()

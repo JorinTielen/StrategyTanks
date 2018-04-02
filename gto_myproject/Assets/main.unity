@@ -224,7 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Color: {r: 0.8014706, g: 0.041252155, b: 0.041252155, a: 1}
-  SniperFactory: {fileID: 1302144187}
+  SniperFactory: {fileID: 1645100816}
+  SoldierFactory: {fileID: 1302144187}
   Map: {fileID: 548853375}
 --- !u!1 &127212582
 GameObject:
@@ -308,6 +309,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1302144186}
+  - {fileID: 1645100815}
   m_Father: {fileID: 98690378}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -389,7 +391,7 @@ GameObject:
   - component: {fileID: 329306960}
   - component: {fileID: 329306961}
   m_Layer: 0
-  m_Name: SniperFactory
+  m_Name: SoldierFactory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -490,7 +492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7105c9ab03dd84086347b877d1c97b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Height: 10
+  Height: 14
   Width: 10
   CellPrefabs:
   - {fileID: 114861483374931538, guid: eff3c7e46738ffe46815fdf0c960a4d8, type: 2}
@@ -911,6 +913,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 775471804}
+--- !u!1 &845344357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 845344358}
+  - component: {fileID: 845344359}
+  m_Layer: 0
+  m_Name: SniperFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &845344358
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 845344357}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1609734715}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &845344359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 845344357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563a6c45859d2464c868921ffa21fe63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitPrefab: {fileID: 114893626789735546, guid: 0ec1f725e476a824f870ef7eb3b2eb13,
+    type: 2}
 --- !u!1 &851906952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,7 +1353,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Color: {r: 0.102941155, g: 0.40608528, b: 1, a: 1}
-  SniperFactory: {fileID: 329306961}
+  SniperFactory: {fileID: 845344359}
+  SoldierFactory: {fileID: 329306961}
   Map: {fileID: 548853375}
 --- !u!1 &1131162419
 GameObject:
@@ -1721,7 +1766,7 @@ GameObject:
   - component: {fileID: 1302144186}
   - component: {fileID: 1302144187}
   m_Layer: 0
-  m_Name: SniperFactory
+  m_Name: SoldierFactory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2138,9 +2183,52 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 329306960}
+  - {fileID: 845344358}
   m_Father: {fileID: 1124423684}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1645100814
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1645100815}
+  - component: {fileID: 1645100816}
+  m_Layer: 0
+  m_Name: SniperFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1645100815
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1645100814}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 137011711}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1645100816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1645100814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563a6c45859d2464c868921ffa21fe63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitPrefab: {fileID: 114893626789735546, guid: 0ec1f725e476a824f870ef7eb3b2eb13,
+    type: 2}
 --- !u!1 &1772945717
 GameObject:
   m_ObjectHideFlags: 0
@@ -2549,7 +2637,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2093994400}
   m_LocalRotation: {x: 0.5735764, y: 0, z: 0, w: 0.8191521}
-  m_LocalPosition: {x: 5, y: 8.78, z: 0.54}
+  m_LocalPosition: {x: 5.1, y: 10.8, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
