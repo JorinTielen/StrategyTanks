@@ -8,7 +8,7 @@ public class Map : MonoBehaviour, ICellRange
 {
 	public int Height;
 	public int Width;
-	
+
 	public Cell[] CellPrefabs;
 
 	private Cell[,] _cells;
@@ -33,7 +33,7 @@ public class Map : MonoBehaviour, ICellRange
 	public List<Cell> GetCellsInRange(Cell center, int range, bool includeEnemies)
 	{
 		var cellsInRange = new List<Cell>();
-		
+
 		cellsInRange.Add(center);
 
 		for (int steps = 0; steps < range; steps++)
@@ -42,7 +42,7 @@ public class Map : MonoBehaviour, ICellRange
 			foreach (var cell in cellsInRange)
 			{
 				var neighbors = GetCellNeighbors(cell);
-				
+
 				foreach (var neighbor in neighbors)
 				{
 					if (includeEnemies)
@@ -55,7 +55,7 @@ public class Map : MonoBehaviour, ICellRange
 					}
 				}
 			}
-			
+
 			cellsInRange.AddRange(temp);
 		}
 
@@ -71,11 +71,11 @@ public class Map : MonoBehaviour, ICellRange
 	{
 		var neighbors = new List<Cell>();
 		var pos = cell.Position;
-		
-		if (pos.x + 1 < Width)		neighbors.Add(_cells[pos.x + 1, pos.y]);
-		if (pos.x - 1 >= 0) 		neighbors.Add(_cells[pos.x - 1, pos.y]);
-		if (pos.y + 1 < Height) 	neighbors.Add(_cells[pos.x, 	pos.y + 1]);
-		if (pos.y - 1 >= 0)			neighbors.Add(_cells[pos.x, 	pos.y - 1]);
+
+		if (pos.x + 1 < Width) neighbors.Add(_cells[pos.x + 1, pos.y]);
+		if (pos.x - 1 >= 0) neighbors.Add(_cells[pos.x - 1, pos.y]);
+		if (pos.y + 1 < Height) neighbors.Add(_cells[pos.x, pos.y + 1]);
+		if (pos.y - 1 >= 0) neighbors.Add(_cells[pos.x, pos.y - 1]);
 
 		return neighbors;
 	}
@@ -100,12 +100,12 @@ public class Map : MonoBehaviour, ICellRange
 		GenerateMap();
 	}
 
-	public Cell GetRandomFreeCell()
+	private Cell GetRandomFreeCell(Point from, Point to)
 	{
 		var freeCells = new List<Cell>();
 		foreach (var c in _cells)
 		{
-			if (c.Empty && c.CellType == CellType.GROUND)
+			if (c.Empty && c.CellType == CellType.GROUND && WithinBounds(c.Position, from, to))
 			{
 				freeCells.Add(c);
 			}
@@ -113,6 +113,30 @@ public class Map : MonoBehaviour, ICellRange
 
 		var i = Random.Range(0, freeCells.Count);
 		return freeCells[i];
+	}
+
+	private bool WithinBounds(Point pos, Point from, Point to)
+	{
+		if (pos.x >= from.x && pos.x < to.x)
+		{
+			if (pos.y >= from.y && pos.y < to.y)
+				return true;
+		}
+
+		return false;
+	}
+
+	public Cell GetRandomStartingPosition(int playerId)
+	{
+		switch (playerId)
+		{
+			case 0:
+				return GetRandomFreeCell(new Point(0, 0), new Point(Width, Height / 2));
+			case 1:
+				return GetRandomFreeCell(new Point(0, Height / 2), new Point(Width, Height));
+		}
+
+		return null;
 	}
 
 	private void GenerateMap()

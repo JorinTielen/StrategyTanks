@@ -12,11 +12,13 @@ public class Player : MonoBehaviour
 	public event GameOverEvent OnGameOver;
 	
 	private List<Unit> _units = new List<Unit>();
+	private int _playerId;
 
-	public void StartGame()
+	public void StartGame(int playerId)
 	{
-		_units.Add(SniperFactory.BuildUnit(Map.GetRandomFreeCell(), this));
-		_units.Add(SoldierFactory.BuildUnit(Map.GetRandomFreeCell(), this));
+		_playerId = playerId;
+		_units.Add(SniperFactory.BuildUnit(Map.GetRandomStartingPosition(_playerId), this));
+		_units.Add(SoldierFactory.BuildUnit(Map.GetRandomStartingPosition(_playerId), this));
 		gameObject.SetActive(false);
 	}
 

@@ -16,12 +16,13 @@ public class TurnManager : MonoBehaviour
 		CurrentPlayer = Players[_currentIndex];
 		
 		//Start up every player
-		foreach (var p in Players)
+		for (var index = 0; index < Players.Count; index++)
 		{
-			p.StartGame();
+			var p = Players[index];
+			p.StartGame(index);
 			p.OnGameOver += GameOver;
 		}
-		
+
 		CurrentPlayer.StartTurn();
 	}
 
