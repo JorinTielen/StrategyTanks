@@ -812,9 +812,10 @@ MonoBehaviour:
   ExplosionEffect: {fileID: 1947821722747928, guid: 40876ca1f2078ac41b797ca1503ab57f,
     type: 2}
   UnitName: Sniper
-  MaxRange: 3
+  UnitType: 0
+  MaxRange: 2
   MaxHealth: 2
-  Damage: 2
+  Damage: 1
   TankRotationAnchor: {fileID: 4084492917707550}
   GunRotationAnchor: {fileID: 4936779037082062}
   FirePoint: {fileID: 4014880287233502}

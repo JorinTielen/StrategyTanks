@@ -977,10 +977,11 @@ MonoBehaviour:
     type: 2}
   ExplosionEffect: {fileID: 1947821722747928, guid: 40876ca1f2078ac41b797ca1503ab57f,
     type: 2}
-  UnitName: Soldier Tank
-  MaxRange: 2
+  UnitName: Soldier
+  UnitType: 1
+  MaxRange: 3
   MaxHealth: 3
-  Damage: 1
+  Damage: 2
   TankRotationAnchor: {fileID: 4202143448629132}
   GunRotationAnchor: {fileID: 4234204668970426}
   FirePoint: {fileID: 4972269050614202}
