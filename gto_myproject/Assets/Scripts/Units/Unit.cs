@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using NUnit.Compatibility;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -17,6 +18,7 @@ public class Unit : MonoBehaviour
 
     [Header("Max Stats")]
     public string UnitName;
+    public UnitType UnitType;
     public int MaxRange;
     public int MaxHealth;
     public int Damage;
@@ -87,7 +89,16 @@ public class Unit : MonoBehaviour
                 }
             }
         
-            _selectedCells = range.GetCellsInRange(Position, MaxRange, true);
+            //Please don't look at this
+            if (UnitType == UnitType.SOLDIER)
+            {
+                _selectedCells = range.GetCellsInRange(Position, MaxRange, true);
+            }
+            else if (UnitType == UnitType.SNIPER)
+            {
+                _selectedCells = range.GetCellsInLineRange(Position);
+            }
+            
             foreach (var cell in _selectedCells)
             {
                 cell.Highlight();
@@ -110,7 +121,16 @@ public class Unit : MonoBehaviour
     {
         if (_canAttack && u.Player != Player)
         {
-            if (range.GetCellsInRange(Position, MaxRange, true).Contains(u.Position))
+            List<Cell> cellsInRange = null;
+            if (UnitType == UnitType.SOLDIER)
+            {
+                cellsInRange = range.GetCellsInRange(Position, MaxRange, true);
+            }
+            else if (UnitType == UnitType.SNIPER)
+            {
+                cellsInRange = range.GetCellsInLineRange(Position);
+            }
+            if (cellsInRange.Contains(u.Position))
             {
                 StartCoroutine(Attack(u, 0.6f));
                 _canAttack = false;
@@ -149,6 +169,7 @@ public class Unit : MonoBehaviour
             GameObject effect = Instantiate(ExplosionEffect, transform.position, transform.rotation);
             
             Player.RemoveUnit(this);
+            Position.Leave();
             Destroy(effect, 5f);
             Destroy(gameObject);
 

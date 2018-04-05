@@ -107,10 +107,7 @@ public class Selection : MonoBehaviour
 					Cell c = hit.transform.gameObject.GetComponentInParent<Cell>();
 					if (c.CurrentUnit == null) return;
 
-					if (c.CurrentUnit.Player == TurnManager.CurrentPlayer)
-					{
-						AttackMode(c);
-					}
+					AttackMode(c);
 				}
 			}
 		}

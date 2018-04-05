@@ -32,9 +32,7 @@ public class Map : MonoBehaviour, ICellRange
 
 	public List<Cell> GetCellsInRange(Cell center, int range, bool includeEnemies)
 	{
-		var cellsInRange = new List<Cell>();
-
-		cellsInRange.Add(center);
+		var cellsInRange = new List<Cell> {center};
 
 		for (int steps = 0; steps < range; steps++)
 		{
@@ -57,6 +55,26 @@ public class Map : MonoBehaviour, ICellRange
 			}
 
 			cellsInRange.AddRange(temp);
+		}
+
+		return cellsInRange;
+	}
+
+	public List<Cell> GetCellsInLineRange(Cell center)
+	{
+		var cellsInRange = new List<Cell> {center};
+
+		foreach (var cell in _cells)
+		{
+			if (cell.Position.Equals(center.Position)) continue;
+			if (cell.Position.x == center.Position.x)
+			{
+				cellsInRange.Add(cell);
+			} 
+			else if (cell.Position.y == center.Position.y)
+			{
+				cellsInRange.Add(cell);
+			}
 		}
 
 		return cellsInRange;
