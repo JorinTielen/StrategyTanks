@@ -55,7 +55,11 @@ public class Selection : MonoBehaviour
 			{
 				if (hit.transform != null)
 				{
-					Select(hit.transform.gameObject.GetComponentInParent<Cell>());
+					Cell c = hit.transform.gameObject.GetComponentInParent<Cell>();
+					if (c.CurrentUnit != null && c.CurrentUnit.Player == TurnManager.CurrentPlayer)
+					{
+						Select(c);
+					}
 				}
 			}
 		}
